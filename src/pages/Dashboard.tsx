@@ -19,7 +19,8 @@ import {
   AlertCircle, 
   TrendingUp,
   ChevronRight,
-  Plus
+  Plus,
+  Zap
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { formatDateTime, cn } from '../lib/utils';
@@ -28,7 +29,12 @@ import { HighlightText } from '../components/HighlightText';
 import { TaskPriority, TaskStatus } from '../types';
 import { useDebounce } from '../hooks/useDebounce';
 
-export const Dashboard: React.FC<{ onAddTask: () => void }> = ({ onAddTask }) => {
+interface DashboardProps {
+  onAddTask: () => void;
+  onUpgrade?: () => void;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) => {
   const { tasks, user, searchQuery } = useData();
   const debouncedSearch = useDebounce(searchQuery, 300);
 
@@ -76,16 +82,51 @@ export const Dashboard: React.FC<{ onAddTask: () => void }> = ({ onAddTask }) =>
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold text-slate-900">Halo, {user?.name || 'Mahasiswa'}! 👋</h1>
-          <p className="text-slate-500 font-medium">Beban tugas kamu hari ini terpantau {tasks.length > 5 ? 'padat' : 'terkendali'}.</p>
+          <h1 className="font-display text-3xl font-bold text-slate-900 flex items-center gap-2">
+            Halo, {user?.name || 'Mahasiswa'}! 👋
+          </h1>
+          <p className="text-slate-500 font-medium italic">Beban tugas kamu hari ini terpantau {taskList.length > 5 ? 'padat' : 'terkendali'}.</p>
         </div>
-        <button 
-          onClick={onAddTask}
-          className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
-        >
-          <Plus className="w-5 h-5" /> Tambah Tugas Baru
-        </button>
+        <div className="flex items-center gap-3">
+          {!user?.isPremium && (
+            <button 
+              onClick={onUpgrade}
+              className="bg-white text-indigo-600 border border-indigo-100 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-50 transition-all shadow-sm"
+            >
+              <Zap className="w-5 h-5 fill-indigo-100" /> Go Pro
+            </button>
+          )}
+          <button 
+            onClick={onAddTask}
+            className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+          >
+            <Plus className="w-5 h-5" /> Tambah Tugas Baru
+          </button>
+        </div>
       </div>
+
+      {!user?.isPremium && (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500 p-8 rounded-[2.5rem] text-white overflow-hidden relative group"
+        >
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left transition-transform group-hover:translate-x-2 duration-500">
+              <h2 className="text-2xl md:text-3xl font-display font-bold mb-2 tracking-tight">Siap Jadi Lulusan Terbaik? 🎓</h2>
+              <p className="text-indigo-50 font-medium max-w-lg opacity-90">Buka akses eksklusif ke Tampilan Kalender, Tugas Kelompok, dan Analitik Lanjutan untuk performa akademik maksimal.</p>
+            </div>
+            <button 
+              onClick={onUpgrade}
+              className="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-indigo-50 transition-all shadow-xl shadow-indigo-950/20 shrink-0 whitespace-nowrap active:scale-95"
+            >
+              Cek Penawaran Pro
+            </button>
+          </div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-150 transition-transform duration-700" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-400/20 rounded-full blur-2xl -ml-24 -mb-24 group-hover:scale-150 transition-transform duration-700" />
+        </motion.div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

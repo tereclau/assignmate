@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-export const Navbar: React.FC<{ onAuth: () => void }> = ({ onAuth }) => (
+export const Navbar: React.FC<{ onAuth: () => void; onPricing?: () => void }> = ({ onAuth, onPricing }) => (
   <nav className="fixed top-0 left-0 right-0 z-50 bg-white/20 backdrop-blur-xl border-b border-white/40">
     <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
       <div className="flex items-center gap-2">
@@ -23,7 +23,7 @@ export const Navbar: React.FC<{ onAuth: () => void }> = ({ onAuth }) => (
       </div>
       <div className="hidden md:flex items-center gap-8">
         <a href="#features" className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Fitur</a>
-        <a href="#pricing" className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Harga</a>
+        <button onClick={onPricing} className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Harga</button>
         <a href="#about" className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">Tentang</a>
       </div>
       <div className="flex items-center gap-4">
@@ -34,7 +34,7 @@ export const Navbar: React.FC<{ onAuth: () => void }> = ({ onAuth }) => (
   </nav>
 );
 
-export const LandingPage: React.FC<{ onAction: () => void }> = ({ onAction }) => {
+export const LandingPage: React.FC<{ onAction: () => void; onUpgrade?: () => void }> = ({ onAction, onUpgrade }) => {
   return (
     <div className="pt-20">
       {/* Hero Section */}
@@ -157,10 +157,10 @@ export const LandingPage: React.FC<{ onAction: () => void }> = ({ onAction }) =>
                 ))}
               </ul>
               <button 
-                onClick={onAction}
-                className="w-full py-4 rounded-2xl bg-white text-indigo-600 font-bold hover:bg-indigo-50 transition-all shadow-xl uppercase tracking-widest text-xs"
+                onClick={onUpgrade}
+                className="w-full py-4 rounded-2xl bg-white text-indigo-600 font-bold hover:bg-slate-50 transition-all shadow-xl uppercase tracking-widest text-xs ring-1 ring-white/20"
               >
-                Upgrade ke Pro
+                Pilih Pro
               </button>
             </div>
           </div>

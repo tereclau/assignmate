@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, User as UserIcon, Mail, Camera, Clipboard, LogOut, ChevronRight, Save, Image as ImageIcon } from 'lucide-react';
+import { X, User as UserIcon, Mail, Camera, Clipboard, LogOut, ChevronRight, Save, Image as ImageIcon, Star, Zap } from 'lucide-react';
 import { useData } from '../context/DataContext';
 
 interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onUpgrade?: () => void;
 }
 
-export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) => {
+export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose, onUpgrade }) => {
   const { user, updateUser, logout } = useData();
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -148,7 +149,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
               {!isEditing ? (
                 <div className="text-center">
-                  <h2 className="text-2xl font-display font-bold text-slate-900">{user.name}</h2>
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <h2 className="text-2xl font-display font-bold text-slate-900">{user.name}</h2>
+                    {user.isPremium && (
+                      <div className="px-2 py-0.5 bg-amber-100 border border-amber-200 rounded-md flex items-center gap-1">
+                        <Star className="w-3 h-3 text-amber-600 fill-amber-600" />
+                        <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest">PRO</span>
+                      </div>
+                    )}
+                  </div>
                   <p className="text-slate-500 font-medium">{user.email}</p>
                   
                   {user.bio && (
@@ -158,6 +167,24 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                   )}
 
                   <div className="grid grid-cols-1 gap-3 mt-8">
+                    {!user.isPremium && (
+                      <button 
+                        onClick={onUpgrade}
+                        className="flex items-center justify-between p-4 bg-linear-to-r from-indigo-500/10 to-purple-500/10 hover:from-indigo-500/20 hover:to-purple-500/20 rounded-2xl border border-indigo-100 hover:border-indigo-200 transition-all group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-white rounded-xl shadow-sm text-indigo-600 group-hover:scale-110 transition-transform">
+                            <Zap className="w-5 h-5 fill-indigo-600" />
+                          </div>
+                          <div className="text-left">
+                            <span className="font-bold text-indigo-900 block">Upgrade ke Pro</span>
+                            <span className="text-[10px] text-indigo-500 font-bold uppercase tracking-wider">Buka Semua Fitur</span>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-5 h-5 text-indigo-400 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    )}
+
                     <button 
                       onClick={() => setIsEditing(true)}
                       className="flex items-center justify-between p-4 bg-slate-50 hover:bg-indigo-50 rounded-2xl border border-slate-100 hover:border-indigo-100 transition-all group"

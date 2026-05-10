@@ -90,12 +90,31 @@ export const Sidebar: React.FC<{
       </nav>
 
       <div className="p-4 border-t border-slate-100">
+        {!isCollapsed && !user?.isPremium && (
+          <div className="glass p-4 rounded-2xl mb-4 relative overflow-hidden group">
+            <div className="relative z-10">
+              <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">Dapatkan Pro</p>
+              <p className="text-[10px] text-slate-500 font-medium mb-3 leading-relaxed">Akses kalender & kolaborasi tim tak terbatas.</p>
+              <button 
+                onClick={() => onTabChange('pricing')}
+                className="w-full bg-indigo-600 text-white py-2 rounded-xl text-[10px] font-bold hover:bg-indigo-700 transition-all uppercase tracking-widest shadow-lg shadow-indigo-100"
+              >
+                Upgrade Sekarang
+              </button>
+            </div>
+            <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-50 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500" />
+          </div>
+        )}
+
         <div className="space-y-2">
           {!isCollapsed && user?.isPremium && (
-            <div className="bg-linear-to-br from-indigo-600 to-violet-700 p-4 rounded-2xl text-white mb-4 relative overflow-hidden group">
-              <div className="relative z-10">
-                <p className="text-xs font-medium text-indigo-100 uppercase tracking-wider mb-1">Status Akun</p>
-                <p className="font-bold text-sm">Premium Member</p>
+            <div className="bg-linear-to-br from-indigo-600 to-violet-700 p-4 rounded-2xl text-white mb-4 relative overflow-hidden group shadow-lg shadow-indigo-100">
+              <div className="relative z-10 flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-indigo-100 uppercase tracking-wider mb-1">Status Akun</p>
+                  <p className="font-bold text-sm tracking-tight">Premium Member</p>
+                </div>
+                <Users className="w-5 h-5 text-indigo-200/50" />
               </div>
               <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-white/10 rounded-full blur-xl group-hover:scale-150 transition-transform duration-500" />
             </div>

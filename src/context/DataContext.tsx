@@ -10,6 +10,7 @@ interface DataContextType extends AppState {
   setUser: (user: User | null) => void;
   updateUser: (updates: Partial<User>) => void;
   logout: () => void;
+  login: (email: string, pass: string, name?: string) => void;
   addNotification: (message: string, type: Notification['type']) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -249,10 +250,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     addNotification('Anda telah keluar', 'info');
   };
 
+  const login = (email: string, pass: string, name: string = 'User') => {
+    // Simulasikan pendaftaran/login
+    setUser({
+      id: Math.random().toString(36).substr(2, 9),
+      name,
+      email,
+      avatar: '',
+      studentId: '2024010100' + Math.floor(Math.random() * 99),
+      university: 'Universitas Indonesia',
+      bio: 'Mahasiswa Berprestasi',
+      isPremium: false,
+    });
+  };
+
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <DataContext.Provider value={{ ...state, addTask, updateTask, deleteTask, addProject, setUser, updateUser, logout, addNotification, searchQuery, setSearchQuery }}>
+    <DataContext.Provider value={{ ...state, addTask, updateTask, deleteTask, addProject, setUser, updateUser, logout, login, addNotification, searchQuery, setSearchQuery }}>
       {children}
     </DataContext.Provider>
   );

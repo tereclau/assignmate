@@ -7,10 +7,12 @@ import { TasksPage } from './pages/TasksPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AuthPage } from './pages/AuthPage';
 import { NewTaskModal } from './components/NewTaskModal';
+import { PricingPage } from './pages/PricingPage';
 import { ProfileModal } from './components/ProfileModal';
 import { Toast } from './components/Toast';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bell, Search, User } from 'lucide-react';
+import { Bell, Search, User, ShieldCheck } from 'lucide-react';
+import { cn } from './lib/utils';
 
 const AppContent: React.FC = () => {
   const { user, searchQuery, setSearchQuery } = useData();
@@ -18,13 +20,23 @@ const AppContent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [showPricing, setShowPricing] = useState(false);
 
-  // If user is not logged in and not looking at auth, show landing
+  // If user is not logged in and not looking at auth, show landing or pricing
   if (!user && !showAuth) {
     return (
       <div className="min-h-screen">
-        <Navbar onAuth={() => setShowAuth(true)} />
-        <LandingPage onAction={() => setShowAuth(true)} />
+        <Navbar onAuth={() => setShowAuth(true)} onPricing={() => setShowPricing(true)} />
+        {showPricing ? (
+          <div className="pt-24 px-8 max-w-7xl mx-auto w-full">
+            <PricingPage onBack={() => setShowPricing(false)} />
+          </div>
+        ) : (
+          <LandingPage 
+            onAction={() => setShowAuth(true)} 
+            onUpgrade={() => setShowPricing(true)} 
+          />
+        )}
       </div>
     );
   }
@@ -37,7 +49,7 @@ const AppContent: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-transparent">
       <Sidebar 
-        activeTab={activeTab} 
+        activeTab={activeTab === 'pricing' ? 'dashboard' : activeTab} 
         onTabChange={setActiveTab} 
         onProfileClick={() => setIsProfileModalOpen(true)} 
       />
@@ -56,6 +68,12 @@ const AppContent: React.FC = () => {
             />
           </div>
           <div className="flex items-center gap-4">
+            {user?.isPremium && (
+              <div className="hidden lg:flex items-center gap-2 px-4 py-1.5 bg-linear-to-r from-amber-400/20 to-orange-400/20 border border-amber-200/50 rounded-full">
+                <ShieldCheck className="w-4 h-4 text-amber-600" />
+                <span className="text-[10px] font-black text-amber-700 uppercase tracking-widest">Premium Member</span>
+              </div>
+            )}
             <button 
               onClick={() => setActiveTab('notifications')}
               className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all relative"
@@ -68,8 +86,16 @@ const AppContent: React.FC = () => {
               className="flex items-center gap-3 pl-4 border-l border-slate-200 cursor-pointer group"
             >
               <div className="text-right hidden sm:block">
-                <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{user?.name}</p>
-                <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">{user?.isPremium ? 'Pro Plan' : 'Free Plan'}</p>
+                <p className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors uppercase tracking-tight flex items-center justify-end gap-1.5">
+                  {user?.name}
+                  {user?.isPremium && <ShieldCheck className="w-3 h-3 text-amber-500" />}
+                </p>
+                <p className={cn(
+                  "text-[10px] font-bold uppercase tracking-widest",
+                  user?.isPremium ? 'text-amber-600' : 'text-indigo-600'
+                )}>
+                  {user?.isPremium ? 'Pro Plan' : 'Free Plan'}
+                </p>
               </div>
               {user?.avatar ? (
                 <img 
@@ -95,9 +121,15 @@ const AppContent: React.FC = () => {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-              {activeTab === 'dashboard' && <Dashboard onAddTask={() => setIsModalOpen(true)} />}
+              {activeTab === 'dashboard' && (
+                <Dashboard 
+                  onAddTask={() => setIsModalOpen(true)} 
+                  onUpgrade={() => setActiveTab('pricing')}
+                />
+              )}
               {activeTab === 'tasks' && <TasksPage onAddTask={() => setIsModalOpen(true)} />}
               {activeTab === 'notifications' && <NotificationsPage />}
+              {activeTab === 'pricing' && <PricingPage onBack={() => setActiveTab('dashboard')} />}
               
               {/* Placeholder for other tabs */}
               {(activeTab === 'calendar' || activeTab === 'group') && (
@@ -109,7 +141,10 @@ const AppContent: React.FC = () => {
                   <p className="text-slate-500 font-medium max-w-sm mx-auto mt-2">
                     Fitur ini tersedia di versi Pro. Upgrade akun kamu untuk mengakses visualisasi kalender dan kolaborasi tim tak terbatas.
                   </p>
-                  <button className="mt-8 bg-slate-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-slate-800 transition-all">
+                  <button 
+                    onClick={() => setActiveTab('pricing')}
+                    className="mt-8 bg-slate-900 text-white px-8 py-3 rounded-2xl font-bold hover:bg-slate-800 transition-all font-inter"
+                  >
                     Upgrade Sekarang
                   </button>
                 </div>
@@ -126,6 +161,10 @@ const AppContent: React.FC = () => {
       <ProfileModal 
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
+        onUpgrade={() => {
+          setIsProfileModalOpen(false);
+          setActiveTab('pricing');
+        }}
       />
       <Toast />
     </div>
