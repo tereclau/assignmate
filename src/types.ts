@@ -33,6 +33,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
+  studentId?: string;
+  university?: string;
   avatar?: string;
   bio?: string;
   isPremium: boolean;

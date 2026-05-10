@@ -104,14 +104,12 @@ export const PricingPage: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     if (!email || !password) return;
     setIsProcessing(true);
     
-    // Simulate account creation
+    // Simulasikan pendaftaran/login dengan status premium langsung aktif
     setTimeout(() => {
-      login(email, password, 'Mahasiswa Pro');
-      // The context will now have the user, but we need to ensure the new user is premium
-      // In a real app, this would be handled server-side during the payment/auth callback
-      updateUser({ isPremium: true });
+      login(email, password, 'Mahasiswa Pro', true);
       setIsProcessing(false);
       setIsSuccess(true);
+      // Jangan langsung onBack() agar user bisa melihat status sukses
       setTimeout(() => onBack(), 3000);
     }, 1500);
   };

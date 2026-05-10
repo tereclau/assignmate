@@ -22,28 +22,34 @@ const AppContent: React.FC = () => {
   const [showAuth, setShowAuth] = useState(false);
   const [showPricing, setShowPricing] = useState(false);
 
-  // If user is not logged in and not looking at auth, show landing or pricing
-  if (!user && !showAuth) {
+  // Priority 1: Guest/Transition Pricing Flow
+  if (showPricing) {
     return (
       <div className="min-h-screen">
         <Navbar onAuth={() => setShowAuth(true)} onPricing={() => setShowPricing(true)} />
-        {showPricing ? (
-          <div className="pt-24 px-8 max-w-7xl mx-auto w-full">
-            <PricingPage onBack={() => setShowPricing(false)} />
-          </div>
-        ) : (
-          <LandingPage 
-            onAction={() => setShowAuth(true)} 
-            onUpgrade={() => setShowPricing(true)} 
-          />
-        )}
+        <div className="pt-24 px-8 max-w-7xl mx-auto w-full">
+          <PricingPage onBack={() => setShowPricing(false)} />
+        </div>
       </div>
     );
   }
 
-  // Show Auth page if requested
+  // Priority 2: Show Auth page if requested
   if (!user && showAuth) {
     return <AuthPage />;
+  }
+
+  // Priority 3: Non-authenticated Landing Page
+  if (!user) {
+    return (
+      <div className="min-h-screen">
+        <Navbar onAuth={() => setShowAuth(true)} onPricing={() => setShowPricing(true)} />
+        <LandingPage 
+          onAction={() => setShowAuth(true)} 
+          onUpgrade={() => setShowPricing(true)} 
+        />
+      </div>
+    );
   }
 
   return (

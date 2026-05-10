@@ -250,7 +250,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     addNotification('Anda telah keluar', 'info');
   };
 
-  const login = (email: string, pass: string, name: string = 'User') => {
+  const login = (email: string, pass: string, name: string = 'User', isPremium: boolean = false) => {
     // Simulasikan pendaftaran/login
     setUser({
       id: Math.random().toString(36).substr(2, 9),
@@ -260,7 +260,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
       studentId: '2024010100' + Math.floor(Math.random() * 99),
       university: 'Universitas Indonesia',
       bio: 'Mahasiswa Berprestasi',
-      isPremium: false,
+      isPremium,
     });
   };
 
