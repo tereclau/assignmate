@@ -19,19 +19,20 @@ const BackgroundElements: React.FC = () => (
   <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none">
     <div className="bg-mesh" />
     <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.4 }}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 2 }}
-      className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-indigo-400/15 rounded-full blur-[140px] animate-pulse-slow" 
+      className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-indigo-400/20 rounded-full blur-[140px] animate-pulse-slow" 
     />
     <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.3 }}
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 2.5 }}
-      className="absolute bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-purple-400/15 rounded-full blur-[120px] animate-pulse-slow" 
+      className="absolute bottom-[-10%] right-[-5%] w-[60%] h-[60%] bg-purple-400/20 rounded-full blur-[120px] animate-pulse-slow" 
       style={{ animationDelay: '3s' }} 
     />
     <div className="absolute top-[15%] right-[5%] w-[40%] h-[40%] bg-cyan-300/10 rounded-full blur-[100px] animate-float" style={{ animationDuration: '15s' }} />
+    <div className="absolute bottom-[20%] left-[-5%] w-[50%] h-[50%] bg-pink-300/10 rounded-full blur-[110px] animate-float" style={{ animationDelay: '4s', animationDuration: '18s' }} />
   </div>
 );
 
