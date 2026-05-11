@@ -11,7 +11,8 @@ import {
   ChevronRight,
   PlusCircle,
   Bell,
-  User as UserIcon
+  User as UserIcon,
+  Zap
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { cn } from '../lib/utils';
@@ -40,7 +41,7 @@ export const Sidebar: React.FC<{
     <motion.aside 
       initial={false}
       animate={{ width: isCollapsed ? 80 : 260 }}
-      className="h-screen bg-white/40 backdrop-blur-3xl border-r border-white/40 flex flex-col sticky top-0 z-30"
+      className="h-screen bg-white/40 backdrop-blur-3xl border-r border-white/40 hidden md:flex flex-col sticky top-0 z-30"
     >
       <div className="p-6 flex items-center justify-between">
         {!isCollapsed && (
@@ -62,27 +63,27 @@ export const Sidebar: React.FC<{
         )}
       </div>
 
-      <nav className="flex-1 px-4 space-y-2 mt-4">
+      <nav className="flex-1 px-4 space-y-2 mt-6">
         {menuItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onTabChange(item.id)}
             className={cn(
-              "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group relative",
+              "w-full flex items-center gap-3 px-3.5 py-3 rounded-[1.25rem] transition-all duration-300 group relative active:scale-95",
               activeTab === item.id 
-                ? "bg-indigo-50 text-indigo-700" 
-                : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                ? "glass bg-white/80 text-indigo-700 shadow-lg shadow-indigo-100/50" 
+                : "text-slate-500 hover:bg-white/40 hover:text-slate-900"
             )}
           >
             <item.icon className={cn(
-              "w-5 h-5 shrink-0",
-              activeTab === item.id ? "text-indigo-600" : "text-slate-400 group-hover:text-slate-600"
+              "w-5 h-5 shrink-0 transition-transform duration-300",
+              activeTab === item.id ? "text-indigo-600 scale-110" : "text-slate-400 group-hover:text-slate-600 group-hover:scale-110"
             )} />
-            {!isCollapsed && <span className="font-medium">{item.label}</span>}
+            {!isCollapsed && <span className="font-bold tracking-tight">{item.label}</span>}
             {activeTab === item.id && (
               <motion.div 
                 layoutId="active-indicator"
-                className="absolute left-0 w-1 h-6 bg-indigo-600 rounded-r-full"
+                className="absolute right-2 w-1.5 h-1.5 bg-indigo-600 rounded-full"
               />
             )}
           </button>
@@ -91,18 +92,21 @@ export const Sidebar: React.FC<{
 
       <div className="p-4 border-t border-slate-100">
         {!isCollapsed && !user?.isPremium && (
-          <div className="glass p-4 rounded-2xl mb-4 relative overflow-hidden group">
+          <div className="glass bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500 p-5 rounded-[2rem] mb-6 relative overflow-hidden group shadow-xl shadow-indigo-200">
             <div className="relative z-10">
-              <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">Dapatkan Pro</p>
-              <p className="text-[10px] text-slate-500 font-medium mb-3 leading-relaxed">Akses kalender & kolaborasi tim tak terbatas.</p>
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center mb-3 shadow-sm border border-white/20">
+                <Zap className="w-5 h-5 text-white fill-white" />
+              </div>
+              <p className="text-sm font-black text-white uppercase tracking-widest mb-1">Dapatkan Pro</p>
+              <p className="text-[10px] text-indigo-100 font-bold mb-4 leading-relaxed opacity-90">Akses fitur eksklusif & kolaborasi tanpa batas.</p>
               <button 
                 onClick={() => onTabChange('pricing')}
-                className="w-full bg-indigo-600 text-white py-2 rounded-xl text-[10px] font-bold hover:bg-indigo-700 transition-all uppercase tracking-widest shadow-lg shadow-indigo-100"
+                className="w-full bg-white text-indigo-600 py-3 rounded-xl text-[10px] font-black hover:bg-indigo-50 transition-all uppercase tracking-[0.15em] shadow-lg active:scale-95"
               >
                 Upgrade Sekarang
               </button>
             </div>
-            <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-50 rounded-full -mr-8 -mt-8 group-hover:scale-110 transition-transform duration-500" />
+            <div className="absolute -top-10 -right-10 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
           </div>
         )}
 

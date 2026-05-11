@@ -78,47 +78,47 @@ export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) =>
   ];
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-6 sm:space-y-8 pb-32 md:pb-12">
       {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="font-display text-3xl font-bold text-slate-900 flex items-center gap-2">
-            Halo, {user?.name || 'Mahasiswa'}! 👋
+          <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 flex items-center gap-2 leading-tight">
+            Halo, {user?.name.split(' ')[0] || 'Mahasiswa'}! 👋
           </h1>
-          <p className="text-slate-500 font-medium italic">Beban tugas kamu hari ini terpantau {taskList.length > 5 ? 'padat' : 'terkendali'}.</p>
+          <p className="text-slate-500 font-medium italic mt-1 opacity-80">Beban tugas kamu hari ini terpantau {taskList.length > 5 ? 'padat' : 'terkendali'}.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           {!user?.isPremium && (
             <button 
               onClick={onUpgrade}
-              className="bg-white text-indigo-600 border border-indigo-100 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-50 transition-all shadow-sm"
+              className="flex-1 sm:flex-none glass-indigo text-indigo-600 px-6 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-50 transition-all active:scale-95"
             >
               <Zap className="w-5 h-5 fill-indigo-100" /> Go Pro
             </button>
           )}
           <button 
             onClick={onAddTask}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
+            className="flex-[2] sm:flex-none bg-indigo-600 text-white px-6 py-3.5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95 whitespace-nowrap"
           >
-            <Plus className="w-5 h-5" /> Tambah Tugas Baru
+            <Plus className="w-5 h-5" /> <span className="hidden xs:inline">Tambah</span> Tugas
           </button>
         </div>
       </div>
 
       {!user?.isPremium && (
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500 p-8 rounded-[2.5rem] text-white overflow-hidden relative group"
+          className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500 p-6 sm:p-8 rounded-[2.5rem] text-white overflow-hidden relative group shadow-2xl shadow-indigo-100"
         >
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left transition-transform group-hover:translate-x-2 duration-500">
               <h2 className="text-2xl md:text-3xl font-display font-bold mb-2 tracking-tight">Siap Jadi Lulusan Terbaik? 🎓</h2>
-              <p className="text-indigo-50 font-medium max-w-lg opacity-90">Buka akses eksklusif ke Tampilan Kalender, Tugas Kelompok, dan Analitik Lanjutan untuk performa akademik maksimal.</p>
+              <p className="text-indigo-50 font-medium max-w-lg opacity-90 text-sm sm:text-base">Buka akses eksklusif ke Tampilan Kalender, Tugas Kelompok, dan Analitik Lanjutan untuk performa akademik maksimal.</p>
             </div>
             <button 
               onClick={onUpgrade}
-              className="bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-indigo-50 transition-all shadow-xl shadow-indigo-950/20 shrink-0 whitespace-nowrap active:scale-95"
+              className="w-full md:w-auto bg-white text-indigo-600 px-8 py-4 rounded-2xl font-bold hover:bg-indigo-50 transition-all shadow-xl shadow-indigo-950/20 shrink-0 whitespace-nowrap active:scale-95"
             >
               Cek Penawaran Pro
             </button>
@@ -129,21 +129,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) =>
       )}
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {stats.map((stat, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="glass p-6 rounded-3xl flex items-center gap-5 group hover:scale-[1.02] transition-all"
+            className="glass p-5 rounded-[2rem] flex items-center gap-5 group hover:scale-[1.02] transition-all cursor-default"
           >
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110", stat.bg)}>
               <stat.icon className={cn("w-7 h-7", stat.color)} />
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">{stat.label}</p>
-              <p className="text-3xl font-display font-bold text-slate-900">{stat.value}</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] mb-0.5">{stat.label}</p>
+              <p className="text-3xl font-display font-bold text-slate-900 tracking-tight">{stat.value}</p>
             </div>
           </motion.div>
         ))}
@@ -228,10 +228,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) =>
       </div>
 
       {/* Task Snapshot */}
-      <div className="glass p-8 rounded-3xl">
-        <div className="flex items-center justify-between mb-8">
+      <div className="glass p-5 sm:p-8 rounded-[2.5rem]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <h3 className="font-display text-xl font-bold text-slate-900">Deadline Terdekat</h3>
-          <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1">
+          <button className="text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center justify-center gap-1 bg-indigo-50 sm:bg-transparent py-2.5 sm:py-0 rounded-xl transition-all">
             Lihat Semua <ChevronRight className="w-4 h-4" />
           </button>
         </div>
@@ -240,27 +240,24 @@ export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) =>
             filteredSnapshot.slice(0, 5).map((task, i) => {
               try {
                 return (
-                  <div key={task.id || i} className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:bg-indigo-50/30 transition-all group">
+                  <div key={task.id || i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-[1.5rem] glass-indigo/50 sm:glass border-none sm:border-slate-100 hover:border-indigo-200 hover:bg-white transition-all group gap-4">
                     <div className="flex items-center gap-4">
                       <div className={cn(
-                        "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
-                        task.priority === 'High' ? 'bg-rose-50 text-rose-600' : 'bg-slate-50 text-slate-600'
+                        "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 shadow-sm",
+                        task.priority === 'High' ? 'bg-rose-50 text-rose-600' : 'bg-white text-slate-600'
                       )}>
                         <CheckCircle2 className="w-6 h-6" />
                       </div>
-                      <div>
-                        <h4 className="font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">
+                      <div className="min-w-0">
+                        <h4 className="font-bold text-slate-900 group-hover:text-indigo-700 transition-colors truncate">
                           <HighlightText text={task.title || 'Tanpa Judul'} search={debouncedSearch} />
                         </h4>
-                        <p className="text-sm text-slate-500 font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
-                          <HighlightText text={task.description || ''} search={debouncedSearch} />
-                        </p>
-                        <p className="text-[10px] text-slate-400 font-medium">Deadline: {formatDateTime(task.dueDate)}</p>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Deadline: {formatDateTime(task.dueDate)}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pl-16 sm:pl-0">
                       <div className={cn(
-                        "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider",
+                        "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
                         task.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 
                         task.status === 'In Progress' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'
                       )}>
@@ -268,7 +265,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onAddTask, onUpgrade }) =>
                       </div>
                       
                       {task.status !== 'Completed' && (
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-2">
                           {task.status === 'Pending' && (
                             <button 
                               onClick={(e) => { e.stopPropagation(); useData().updateTask(task.id, { status: 'In Progress' }); }}
