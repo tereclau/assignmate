@@ -15,7 +15,7 @@ import { cn } from '../lib/utils';
 import { Footer } from '../components/Footer';
 
 export const Navbar: React.FC<{ onAuth: () => void; onPricing?: () => void }> = ({ onAuth, onPricing }) => (
-  <nav className="fixed top-0 left-0 right-0 z-50 px-6 sm:px-12 py-6">
+  <nav className="fixed top-0 left-0 right-0 z-50 bg-white/40 backdrop-blur-3xl border-b border-white/20 px-6 sm:px-12 py-5 transition-all">
     <div className="max-w-7xl mx-auto flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-[#6344f5] rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">

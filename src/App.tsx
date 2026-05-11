@@ -11,6 +11,7 @@ import { NewTaskModal } from './components/NewTaskModal';
 import { PricingPage } from './pages/PricingPage';
 import { ProfileModal } from './components/ProfileModal';
 import { Toast } from './components/Toast';
+import { FloatingNav } from './components/FloatingNav';
 import { motion, AnimatePresence } from 'motion/react';
 import { Bell, Search, User, ShieldCheck, CheckSquare } from 'lucide-react';
 import { cn } from './lib/utils';
@@ -217,6 +218,7 @@ const AppContent: React.FC = () => {
           setActiveTab('pricing');
         }}
       />
+      <FloatingNav />
       <Toast />
     </div>
   );
